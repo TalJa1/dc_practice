@@ -101,3 +101,13 @@ GROUP BY
     c.`MaritalStatus`,
     c.`Gender`
 ORDER BY TotalProfit DESC;
+
+-- List all product CategoryNames and the total number of distinct products within each category.
+SELECT p.`ProductName`, pc.`CategoryName`, COUNT(DISTINCT p.`ProductKey`) AS DistinctProductCount
+FROM tbl_stg_prd p
+JOIN tbl_stg_prdsubcat pr
+USING (`ProductSubcategoryKey`)
+JOIN tbl_stg_prdcat pc
+USING (`ProductCategoryKey`)
+GROUP BY p.`ProductName`, pc.`CategoryName`
+ORDER BY pc.`CategoryName`, p.`ProductName`;
