@@ -75,3 +75,4 @@ GROUP BY
     p.`ProductName`
 ORDER BY TotalOrderQuantity DESC;
 
+-- Calculate the total profit generated from all sales across all products
