@@ -76,3 +76,28 @@ GROUP BY
 ORDER BY TotalOrderQuantity DESC;
 
 -- Calculate the total profit generated from all sales across all products
+SELECT p.`ProductName`, SUM(
+        (
+            p.`ProductPrice` - p.`ProductCost`
+        ) * s.`OrderQuantity`
+    ) AS TotalProfit
+FROM tbl_stg_prd p
+    JOIN sales s USING (`ProductKey`)
+GROUP BY
+    p.`ProductName`
+ORDER BY TotalProfit DESC;
+
+-- What is the total profit generated from customers, grouped by their MaritalStatus and Gender?
+SELECT c.`MaritalStatus`, c.`Gender`, SUM(
+        (
+            p.`ProductPrice` - p.`ProductCost`
+        ) * s.`OrderQuantity`
+    ) AS TotalProfit
+FROM
+    tbl_stg_customers c
+    JOIN sales s USING (`CustomerKey`)
+    JOIN tbl_stg_prd p USING (`ProductKey`)
+GROUP BY
+    c.`MaritalStatus`,
+    c.`Gender`
+ORDER BY TotalProfit DESC;
