@@ -49,3 +49,11 @@ JOIN (
 ) s
 USING (`ProductKey`)
 GROUP BY pc.`CategoryName`
+
+-- How many customers are there for each MaritalStatus and Gender combination? List MaritalStatus, Gender, and the count of customers
+SELECT c.`MaritalStatus`, c.`Gender`, COUNT(*)
+FROM tbl_stg_customers c
+GROUP BY c.`MaritalStatus`, c.`Gender`
+
+-- What is the total OrderQuantity sold for each product? List the ProductName and the sum of OrderQuantity.
+-- Order the results by total quantity sold in descending order
