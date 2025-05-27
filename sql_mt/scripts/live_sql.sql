@@ -98,33 +98,59 @@ FROM
     JOIN sales s USING (`CustomerKey`)
     JOIN tbl_stg_prd p USING (`ProductKey`)
 GROUP BY
-    c.`MaritalStatus`, 
+    c.`MaritalStatus`,
     c.`Gender`
 ORDER BY TotalProfit DESC;
 
 -- List all product CategoryNames and the total number of distinct products within each category.
 SELECT p.`ProductName`, pc.`CategoryName`, COUNT(DISTINCT p.`ProductKey`) AS DistinctProductCount
-FROM tbl_stg_prd p
-JOIN tbl_stg_prdsubcat pr
-USING (`ProductSubcategoryKey`)
-JOIN tbl_stg_prdcat pc
-USING (`ProductCategoryKey`)
-GROUP BY p.`ProductName`, pc.`CategoryName`
+FROM
+    tbl_stg_prd p
+    JOIN tbl_stg_prdsubcat pr USING (`ProductSubcategoryKey`)
+    JOIN tbl_stg_prdcat pc USING (`ProductCategoryKey`)
+GROUP BY
+    p.`ProductName`,
+    pc.`CategoryName`
 ORDER BY pc.`CategoryName`, p.`ProductName`;
 
 -- What is the average AnnualIncome of customers who have purchased products belonging to the 'Bikes' CategoryName?
-SELECT AVG(c.`AnnualIncome`) as `AnnualIncome`, CONCAT(c.`FirstName`, ' ', c.`LastName`) AS CustomerName
-FROM tbl_stg_prdsubcat pr
-JOIN tbl_stg_prdcat pc USING (`ProductCategoryKey`)
-JOIN tbl_stg_prd p USING (`ProductSubcategoryKey`)
-JOIN sales s USING (`ProductKey`)
-JOIN tbl_stg_customers c USING (`CustomerKey`)
-WHERE pc.`CategoryName` = 'Bikes'
-GROUP BY pc.`CategoryName`, c.`AnnualIncome`, CustomerName
+SELECT
+    AVG(c.`AnnualIncome`) as `AnnualIncome`,
+    CONCAT(
+        c.`FirstName`,
+        ' ',
+        c.`LastName`
+    ) AS CustomerName
+FROM
+    tbl_stg_prdsubcat pr
+    JOIN tbl_stg_prdcat pc USING (`ProductCategoryKey`)
+    JOIN tbl_stg_prd p USING (`ProductSubcategoryKey`)
+    JOIN sales s USING (`ProductKey`)
+    JOIN tbl_stg_customers c USING (`CustomerKey`)
+WHERE
+    pc.`CategoryName` = 'Bikes'
+GROUP BY
+    pc.`CategoryName`,
+    c.`AnnualIncome`,
+    CustomerName
 
 -- Which sales Country (from tbl_stg_territory) has the highest total OrderQuantity? Show the country and its total quantity.
 SELECT te.`Country`, SUM(s.`OrderQuantity`) as "Total Order Quantity"
 FROM tbl_stg_territory te
-JOIN sales s ON te.`SalesTerritoryKey` = s.`TerritoryKey`
-GROUP BY te.`Country`
+    JOIN sales s ON te.`SalesTerritoryKey` = s.`TerritoryKey`
+GROUP BY
+    te.`Country`
 ORDER BY SUM(s.`OrderQuantity`) DESC
+
+-- List the FirstName and LastName of customers who have placed more than 3 distinct orders (i.e., have more than 3 unique OrderNumbers).
+-- Also, show the count of their distinct orders.
+SELECT CONCAT(
+        c.`FirstName`, " ", c.`LastName`
+    ) AS `Full Name`, COUNT(DISTINCT s.`OrderNumber`) AS `Total Orders`
+FROM tbl_stg_customers c
+    JOIN sales s USING (`CustomerKey`)
+GROUP BY
+    `Full Name`
+HAVING
+    COUNT(DISTINCT s.`OrderNumber`) > 3
+ORDER BY COUNT(DISTINCT s.`OrderNumber`) DESC
