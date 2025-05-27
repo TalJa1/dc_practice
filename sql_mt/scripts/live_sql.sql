@@ -111,3 +111,20 @@ JOIN tbl_stg_prdcat pc
 USING (`ProductCategoryKey`)
 GROUP BY p.`ProductName`, pc.`CategoryName`
 ORDER BY pc.`CategoryName`, p.`ProductName`;
+
+-- What is the average AnnualIncome of customers who have purchased products belonging to the 'Bikes' CategoryName?
+SELECT AVG(c.`AnnualIncome`) as `AnnualIncome`, CONCAT(c.`FirstName`, ' ', c.`LastName`) AS CustomerName
+FROM tbl_stg_prdsubcat pr
+JOIN tbl_stg_prdcat pc USING (`ProductCategoryKey`)
+JOIN tbl_stg_prd p USING (`ProductSubcategoryKey`)
+JOIN sales s USING (`ProductKey`)
+JOIN tbl_stg_customers c USING (`CustomerKey`)
+WHERE pc.`CategoryName` = 'Bikes'
+GROUP BY pc.`CategoryName`, c.`AnnualIncome`, CustomerName
+
+-- Which sales Country (from tbl_stg_territory) has the highest total OrderQuantity? Show the country and its total quantity.
+SELECT te.`Country`, SUM(s.`OrderQuantity`) as "Total Order Quantity"
+FROM tbl_stg_territory te
+JOIN sales s ON te.`SalesTerritoryKey` = s.`TerritoryKey`
+GROUP BY te.`Country`
+ORDER BY SUM(s.`OrderQuantity`) DESC
