@@ -98,7 +98,7 @@ FROM
     JOIN sales s USING (`CustomerKey`)
     JOIN tbl_stg_prd p USING (`ProductKey`)
 GROUP BY
-    c.`MaritalStatus`,
+    c.`MaritalStatus`, 
     c.`Gender`
 ORDER BY TotalProfit DESC;
 
