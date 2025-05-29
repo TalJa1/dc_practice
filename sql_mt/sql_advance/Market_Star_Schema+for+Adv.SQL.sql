@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 -- ------------------------------------------------------
-
+DROP DATABASE IF EXISTS market_star_schema;
 -- Creating a Database
 CREATE DATABASE market_star_schema;
 
