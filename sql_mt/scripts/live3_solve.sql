@@ -89,3 +89,18 @@ balance
 avg_txn_amount
 risk_flag*/
 
+SELECT
+    account_id,
+    balance,
+    avg_txn_amount,
+    CASE
+        WHEN avg_txn_amount > (balance * 0.5) THEN 'High Risk'
+        ELSE 'Low Risk'
+    END AS risk_flag
+FROM (
+        SELECT a.account_id, a.balance, ROUND(AVG(t.amount)) AS avg_txn_amount
+        FROM accounts a
+            JOIN transactions t USING (account_id)
+        GROUP BY
+            a.account_id, a.balance
+    ) as tbl
