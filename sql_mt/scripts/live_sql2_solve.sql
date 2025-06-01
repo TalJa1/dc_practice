@@ -88,4 +88,48 @@ SELECT c.`CUST_CITY`, c.`PAYMENT_AMT`, SUM(c.`PAYMENT_AMT`) OVER (
     )
 FROM customer c
 
--- problem 4:
+-- problem 4: Dynamic Commission Adjustment
+/*Business Scenario: The company wants to adjust the commission rates for
+its agents based on their performance in collecting advance payments. The
+adjustment is to be made according to the average amount of advance
+payments each agent has collected. The goal is to incentivize agents who
+collect higher advance payments by increasing their commission, while
+reducing the commission for those who collect lower advance payments.
+
+Task: Write a SQL query that calculates a new commission rate for each
+agent based on the following rules:
+
+If the average advance amount collected by an agent is less than 750: The
+new commission will be 0.75 times the current commission.
+
+If the average advance amount collected by an agent is between 750 and
+1000 (inclusive): The new commission will be 0.9 times the current
+commission.
+
+If the average advance amount collected by an agent is more than 1000: The
+new commission will be 1.2 times the current commission.
+
+The output should include the following columns:
+
+agent_code: The code of the agent.
+
+updated_commission: The newly calculated commission based on the rules
+above.*/
+WITH
+    Avg_Advance AS (
+        SELECT a.`AGENT_CODE`, a.`COMMISSION`, ROUND(AVG(o.`ADVANCE_AMOUNT`)) as `avg_advance_amt`, a.`AGENT_NAME`
+        FROM agents a
+            JOIN orders o USING (`AGENT_CODE`)
+        GROUP BY
+            a.`AGENT_CODE`
+        ORDER BY a.`AGENT_CODE`
+    )
+SELECT
+    `AGENT_CODE`,
+    `AGENT_NAME`,
+    CASE
+        WHEN Avg_Advance.`avg_advance_amt` < 750 THEN Avg_Advance.`COMMISSION` * 0.75
+        WHEN Avg_Advance.`avg_advance_amt` BETWEEN 750 AND 1000  THEN Avg_Advance.`COMMISSION` * 0.9
+        ELSE Avg_Advance.`COMMISSION` * 1.2
+    END AS `updated_commission`
+FROM Avg_Advance
