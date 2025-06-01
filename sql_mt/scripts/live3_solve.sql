@@ -1,61 +1,51 @@
-CREATE TABLE customers (
-    cust_id INT PRIMARY KEY,
-    cust_name VARCHAR(100),
-    city VARCHAR(50),
-    join_date DATE
-);
+-- Active: 1748482717956@@127.0.0.1@3306@bank_management
+use bank_management;
 
-CREATE TABLE accounts (
-    account_id INT PRIMARY KEY,
-    cust_id INT,
-    acc_type VARCHAR(50),
-    balance DECIMAL(12,2),
-    rm_id INT,
-    FOREIGN KEY (cust_id) REFERENCES customers(cust_id)
-);
+-- Problem 1:
+/*Write a SQL query to return:
 
-CREATE TABLE transactions (
-    txn_id INT PRIMARY KEY,
-    account_id INT,
-    txn_date DATE,
-    txn_type VARCHAR(10),  -- 'credit' or 'debit'
-    amount DECIMAL(10,2),
-    FOREIGN KEY (account_id) REFERENCES accounts(account_id)
-);
+rm_name
+total_managed_balance
+ranking (where 1 = lowest)*/
+WITH
+    RMtotals AS (
+        SELECT rm.rm_name, SUM(a.balance) AS total_managed_balance
+        FROM
+            relationship_managers rm
+            JOIN accounts a ON rm.rm_id = a.rm_id
+        GROUP BY
+            rm.rm_name
+    ),
+    RankedRMs AS (
+        SELECT
+            rm_name,
+            total_managed_balance,
+            RANK() OVER (
+                ORDER BY total_managed_balance ASC
+            ) AS ranking
+        FROM RMtotals
+    )
+SELECT
+    rm_name,
+    total_managed_balance,
+    ranking
+FROM RankedRMs
+WHERE
+    ranking <= 3
+ORDER BY ranking ASC;
 
-CREATE TABLE relationship_managers (
-    rm_id INT PRIMARY KEY,
-    rm_name VARCHAR(100),
-    region VARCHAR(50)
-);
+-- Problem 2:
+/*Detecting Dormant Bank Accounts*/
+SELECT a.account_id, c.cust_name, a.acc_type
+FROM accounts a
+    JOIN customers c ON a.cust_id = c.cust_id
+WHERE
+    NOT EXISTS (
+        SELECT 1
+        FROM transactions t
+        WHERE
+            t.account_id = a.account_id
+            AND t.txn_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) -- Check for any transaction in the last 6 months
+    );
 
-
--- Customers
-INSERT INTO customers VALUES
-(1, 'Amit Shah', 'Delhi', '2022-01-15'),
-(2, 'Priya Verma', 'Mumbai', '2023-03-22'),
-(3, 'Rahul Joshi', 'Delhi', '2021-11-05'),
-(4, 'Sneha Nair', 'Bangalore', '2023-07-18');
-
--- Relationship Managers
-INSERT INTO relationship_managers VALUES
-(101, 'Ravi Mehta', 'North'),
-(102, 'Swati Patel', 'West'),
-(103, 'Anil Rao', 'South');
-
--- Accounts
-INSERT INTO accounts VALUES
-(1001, 1, 'Savings', 15000.50, 101),
-(1002, 2, 'Current', 8500.00, 102),
-(1003, 3, 'Savings', 72000.00, 101),
-(1004, 4, 'Savings', 9200.75, 103);
-
--- Transactions
-INSERT INTO transactions VALUES
-(5001, 1001, '2024-12-01', 'debit', 2000.00),
-(5002, 1001, '2025-01-10', 'credit', 5000.00),
-(5003, 1002, '2025-01-11', 'credit', 1500.00),
-(5004, 1003, '2025-01-12', 'debit', 10000.00),
-(5005, 1004, '2025-01-12', 'debit', 1200.00),
-(5006, 1003, '2025-01-15', 'credit', 3000.00),
-(5007, 1002, '2025-01-15', 'debit', 800.00);
+-- Problem 3:
