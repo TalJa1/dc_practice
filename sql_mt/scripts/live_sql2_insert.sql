@@ -1,5 +1,3 @@
--- Active: 1748482717956@@127.0.0.1@3306@sqlbusinessproblem
-/*Business Problem 1: Insurance Industry - DDLs and DMLs*/
 create database sqlbusinessproblem;
 
 use sqlbusinessproblem;
@@ -14,9 +12,33 @@ CREATE TABLE IF NOT EXISTS `agents` (
     PRIMARY KEY (`AGENT_CODE`)
 ) ENGINE = MyISAM DEFAULT CHARSET = latin1;
 
---
--- Dumping data for table `agents`
---
+
+CREATE TABLE IF NOT EXISTS `customer` (
+    `CUST_CODE` varchar(6) NOT NULL,
+    `CUST_NAME` varchar(40) NOT NULL,
+    `CUST_CITY` varchar(35) DEFAULT NULL,
+    `WORKING_AREA` varchar(35) NOT NULL,
+    `CUST_COUNTRY` varchar(20) NOT NULL,
+    `GRADE` decimal(10, 0) DEFAULT NULL,
+    `OPENING_AMT` decimal(12, 2) NOT NULL,
+    `RECEIVE_AMT` decimal(12, 2) NOT NULL,
+    `PAYMENT_AMT` decimal(12, 2) NOT NULL,
+    `OUTSTANDING_AMT` decimal(12, 2) NOT NULL,
+    `PHONE_NO` varchar(17) NOT NULL,
+    `AGENT_CODE` varchar(6) DEFAULT NULL,
+    KEY `CUSTCITY` (`CUST_CITY`),
+    KEY `CUSTCITY_COUNTRY` (`CUST_CITY`, `CUST_COUNTRY`)
+) ENGINE = MyISAM DEFAULT CHARSET = latin1;
+
+CREATE TABLE IF NOT EXISTS `orders` (
+    `ORD_NUM` decimal(6, 0) NOT NULL,
+    `ORD_AMOUNT` decimal(12, 2) NOT NULL,
+    `ADVANCE_AMOUNT` decimal(12, 2) NOT NULL,
+    `ORD_DATE` date NOT NULL,
+    `CUST_CODE` varchar(6) NOT NULL,
+    `AGENT_CODE` varchar(6) NOT NULL,
+    `ORD_DESCRIPTION` varchar(60) NOT NULL
+) ENGINE = MyISAM DEFAULT CHARSET = latin1;
 
 INSERT INTO
     `agents` (
@@ -123,31 +145,6 @@ VALUES (
         '008-22536178   ',
         '\r'
     );
-
---
--- Table structure for table `customer`
---
-
-CREATE TABLE IF NOT EXISTS `customer` (
-    `CUST_CODE` varchar(6) NOT NULL,
-    `CUST_NAME` varchar(40) NOT NULL,
-    `CUST_CITY` varchar(35) DEFAULT NULL,
-    `WORKING_AREA` varchar(35) NOT NULL,
-    `CUST_COUNTRY` varchar(20) NOT NULL,
-    `GRADE` decimal(10, 0) DEFAULT NULL,
-    `OPENING_AMT` decimal(12, 2) NOT NULL,
-    `RECEIVE_AMT` decimal(12, 2) NOT NULL,
-    `PAYMENT_AMT` decimal(12, 2) NOT NULL,
-    `OUTSTANDING_AMT` decimal(12, 2) NOT NULL,
-    `PHONE_NO` varchar(17) NOT NULL,
-    `AGENT_CODE` varchar(6) DEFAULT NULL,
-    KEY `CUSTCITY` (`CUST_CITY`),
-    KEY `CUSTCITY_COUNTRY` (`CUST_CITY`, `CUST_COUNTRY`)
-) ENGINE = MyISAM DEFAULT CHARSET = latin1;
-
---
--- Dumping data for table `customer`
---
 
 INSERT INTO
     `customer` (
@@ -514,23 +511,6 @@ VALUES (
         'PPHGRTS',
         'A010  '
     );
-
--- Table structure for table `orders`
---
-
-CREATE TABLE IF NOT EXISTS `orders` (
-    `ORD_NUM` decimal(6, 0) NOT NULL,
-    `ORD_AMOUNT` decimal(12, 2) NOT NULL,
-    `ADVANCE_AMOUNT` decimal(12, 2) NOT NULL,
-    `ORD_DATE` date NOT NULL,
-    `CUST_CODE` varchar(6) NOT NULL,
-    `AGENT_CODE` varchar(6) NOT NULL,
-    `ORD_DESCRIPTION` varchar(60) NOT NULL
-) ENGINE = MyISAM DEFAULT CHARSET = latin1;
-
---
--- Dumping data for table `orders`
---
 
 INSERT INTO
     `orders` (
