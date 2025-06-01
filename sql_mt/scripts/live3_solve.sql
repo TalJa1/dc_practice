@@ -1,4 +1,4 @@
--- Active: 1748482717956@@127.0.0.1@3306@bank_management
+-- Active: 1748774263027@@127.0.0.1@3306@bank_management
 use bank_management;
 
 -- Problem 1:
@@ -49,3 +49,43 @@ WHERE
     );
 
 -- Problem 3: Identifying Top Credit Transactions by City
+/*Business Scenario: The bank wants to analyze where customers are
+depositing the most money via credits, and identify the top credit amount done
+per city.
+
+Task: For each city, return:
+city
+customer_name
+max_credit_amount*/
+SELECT *
+FROM (
+        SELECT c.city, c.cust_name, RANK() OVER (
+                PARTITION BY
+                    c.city
+                ORDER BY MAX(t.amount) DESC
+            ) AS rnk, MAX(t.amount) AS amount
+        FROM
+            customers c
+            JOIN accounts a USING (cust_id)
+            JOIN transactions t USING (account_id)
+        WHERE
+            t.txn_type = 'credit'
+        GROUP BY
+            c.city, c.cust_name, t.amount
+    ) as tbl
+WHERE
+    tbl.rnk = 1
+
+-- Problem 4: Average Transaction Volume vs Balance
+/*Business Scenario: For better risk modeling, the bank wants to compare
+average transaction amount to account balance for each account. If the
+average transaction is more than 50% of the balance, the account is marked
+“High Risk”, else “Low Risk”.
+
+Task: Return:
+
+account_id
+balance
+avg_txn_amount
+risk_flag*/
+
