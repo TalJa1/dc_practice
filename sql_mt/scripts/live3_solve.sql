@@ -48,4 +48,4 @@ WHERE
             AND t.txn_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) -- Check for any transaction in the last 6 months
     );
 
--- Problem 3:
+-- Problem 3: Identifying Top Credit Transactions by City
