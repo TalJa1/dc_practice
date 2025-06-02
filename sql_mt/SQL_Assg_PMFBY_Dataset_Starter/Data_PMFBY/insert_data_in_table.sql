@@ -1,6 +1,5 @@
-
 -- You can only load data from local storage if the local_infile parameter is set to 1
-SET GLOBAL local_infile=1;
+SET GLOBAL local_infile = 1;
 -- You might need to change the local_infile parameter by editing it in the configuration file
 -- Open "my.ini" (Windows) or "my.cnf" (Mac/Linux) and set local_infile=1
 
@@ -9,6 +8,13 @@ SET GLOBAL local_infile=1;
 CREATE SCHEMA IF NOT EXISTS ndap;
 
 USE ndap;
+
+-- Drop tables
+DROP TABLE IF EXISTS FarmersInsuranceData;
+
+DROP TABLE IF EXISTS districts;
+
+DROP TABLE IF EXISTS states;
 
 CREATE TABLE IF NOT EXISTS FarmersInsuranceData (
     rowID INT PRIMARY KEY,
@@ -57,9 +63,5 @@ CREATE TABLE IF NOT EXISTS FarmersInsuranceData (
     LandArea FLOAT
 );
 
-LOAD DATA LOCAL INFILE "C:/ZTalJaZ/Storage/MasterOfDataScience/Python/Code/Practice/sql_mt/SQL_Assg_PMFBY_Dataset_Starter/Data_PMFBY/data.csv"
-INTO TABLE FarmersInsuranceData
-FIELDS TERMINATED BY ','  
-ENCLOSED BY '"'          
-LINES TERMINATED BY '\n' 
-IGNORE 1 ROWS;
+LOAD DATA LOCAL INFILE "C:/ZTalJaZ/Storage/MasterOfDataScience/Python/Code/Practice/sql_mt/SQL_Assg_PMFBY_Dataset_Starter/Data_PMFBY/data.csv" INTO
+TABLE FarmersInsuranceData FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
