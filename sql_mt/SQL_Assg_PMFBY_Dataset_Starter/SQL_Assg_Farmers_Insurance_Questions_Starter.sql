@@ -22,12 +22,12 @@ SELECT DISTINCT `srcStateName` FROM `FarmersInsuranceData`;
 -- ###
 -- TYPE YOUR CODE BELOW >
 SELECT
-    f.srcStateName,
-    SUM(f.TotalFarmersCovered) AS TotalFarmersCovered,
-    SUM(f.SumInsured) AS SumInsured
-FROM `FarmersInsuranceData` f
+    f_the_farmers.srcStateName,
+    SUM(f_the_farmers.TotalFarmersCovered) AS TotalFarmersCovered,
+    SUM(f_the_farmers.SumInsured) AS SumInsured
+FROM `FarmersInsuranceData` f_the_farmers
 GROUP BY
-    f.srcStateName
+    f_the_farmers.srcStateName
 ORDER BY TotalFarmersCovered DESC;
 
 -- ###
