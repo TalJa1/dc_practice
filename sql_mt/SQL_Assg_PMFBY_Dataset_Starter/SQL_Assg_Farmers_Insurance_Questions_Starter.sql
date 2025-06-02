@@ -137,6 +137,17 @@ GROUP BY
 -- 	[4 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    `srcStateName`,
+    SUM(`FarmersPremiumAmount`) AS TotalFarmersPremiumAmount,
+    SUM(`StatePremiumAmount`) AS TotalStatePremiumAmount,
+    SUM(`GOVPremiumAmount`) AS TotalGOVPremiumAmount,
+    SUM(`TotalFarmersCovered`) AS TotalFarmersCovered
+FROM `FarmersInsuranceData`
+WHERE
+    `SumInsured` > 500000
+GROUP BY
+    `srcStateName`;
 
 -- ###
 
@@ -149,6 +160,15 @@ GROUP BY
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    `srcDistrictName`,
+    `TotalPopulation`
+FROM `FarmersInsuranceData`
+WHERE
+    `srcYear` = '2020'
+ORDER BY
+    `TotalPopulation` DESC
+LIMIT 5;
 
 -- ###
 
@@ -158,6 +178,17 @@ GROUP BY
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    `srcStateName`,
+    `srcDistrictName`,
+    `SumInsured`
+FROM `FarmersInsuranceData`
+WHERE
+    `FarmersPremiumAmount` > 0
+ORDER BY
+    `SumInsured` ASC,
+    `FarmersPremiumAmount` ASC
+LIMIT 10;
 
 ###
 
