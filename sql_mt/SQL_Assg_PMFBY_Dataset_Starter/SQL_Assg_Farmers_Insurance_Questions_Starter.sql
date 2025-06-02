@@ -1,8 +1,8 @@
+-- Active: 1748774263027@@127.0.0.1@3306@ndap
 use ndap;
 
-
 -- ----------------------------------------------------------------------------------------------
--- SECTION 1. 
+-- SECTION 1.
 -- SELECT Queries [5 Marks]
 
 -- 	Q1.	Retrieve the names of all states (srcStateName) from the dataset.
@@ -11,11 +11,11 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 -- <write your answers in the empty spaces given, the length of solution queries (and the solution writing space) can vary>
-
+SELECT DISTINCT srcStateName FROM `FarmersInsuranceData`;
 
 ###
 
--- 	Q2.	Retrieve the total number of farmers covered (TotalFarmersCovered) 
+-- 	Q2.	Retrieve the total number of farmers covered (TotalFarmersCovered)
 -- 		and the sum insured (SumInsured) for each state (srcStateName), ordered by TotalFarmersCovered in descending order.
 -- ###
 -- 	[3 Marks]
@@ -26,7 +26,7 @@ use ndap;
 -- ###
 
 -- --------------------------------------------------------------------------------------
--- SECTION 2. 
+-- SECTION 2.
 -- Filtering Data (WHERE) [15 Marks]
 
 -- 	Q3.	Retrieve all records where Year is '2020'.
@@ -34,7 +34,6 @@ use ndap;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
 
 -- ###
 
@@ -44,28 +43,24 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
 -- ###
 
--- 	Q5.	Retrieve the srcStateName, srcDistrictName, and the sum of FarmersPremiumAmount for each district in the year 2018, 
+-- 	Q5.	Retrieve the srcStateName, srcDistrictName, and the sum of FarmersPremiumAmount for each district in the year 2018,
 -- 		and display the results ordered by FarmersPremiumAmount in ascending order.
 -- ###
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
 -- ###
 
--- 	Q6.	Retrieve the total number of farmers covered (TotalFarmersCovered) and the sum of premiums (GrossPremiumAmountToBePaid) for each state (srcStateName) 
+-- 	Q6.	Retrieve the total number of farmers covered (TotalFarmersCovered) and the sum of premiums (GrossPremiumAmountToBePaid) for each state (srcStateName)
 -- 		where the insured land area (InsuredLandArea) is greater than 5.0 and the Year is 2018.
 -- ###
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-	  
 -- ###
 -- ------------------------------------------------------------------------------------------------
 
@@ -78,8 +73,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
 -- ###
 
 -- 	Q8. 	Calculate the total number of farmers covered (TotalFarmersCovered) for each district (srcDistrictName) where Insurance units is greater than 0.
@@ -88,19 +81,14 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
 -- ###
 
--- 	Q9.	For each state (srcStateName), calculate the total premium amounts (FarmersPremiumAmount, StatePremiumAmount, GOVPremiumAmount) 
+-- 	Q9.	For each state (srcStateName), calculate the total premium amounts (FarmersPremiumAmount, StatePremiumAmount, GOVPremiumAmount)
 -- 		and the total number of farmers covered (TotalFarmersCovered). Only include records where the sum insured (SumInsured) is greater than 500,000 (remember to check for scaling).
 -- ###
 -- 	[4 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
-
-
 
 -- ###
 
@@ -114,30 +102,23 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
-
 -- ###
 
--- 	Q11.	Retrieve the srcStateName, srcDistrictName, and SumInsured for the 10 districts with the lowest non-zero FarmersPremiumAmount, 
+-- 	Q11.	Retrieve the srcStateName, srcDistrictName, and SumInsured for the 10 districts with the lowest non-zero FarmersPremiumAmount,
 -- 		ordered by insured sum and then the FarmersPremiumAmount.
 -- ###
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
 ###
 
--- 	Q12. 	Retrieve the top 3 states (srcStateName) along with the year (srcYear) where the ratio of insured farmers (TotalFarmersCovered) to the total population (TotalPopulation) is highest. 
+-- 	Q12. 	Retrieve the top 3 states (srcStateName) along with the year (srcYear) where the ratio of insured farmers (TotalFarmersCovered) to the total population (TotalPopulation) is highest.
 -- 		Sort the results by the ratio in descending order.
 -- ###
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
-
 
 -- ###
 
@@ -152,8 +133,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
 -- ###
 
 -- 	Q14. 	Retrieve the srcDistrictName where the district name starts with 'B'.
@@ -162,8 +141,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
 -- ###
 
 -- 	Q15. 	Retrieve the srcStateName and srcDistrictName where the district name contains the word 'pur' at the end.
@@ -171,7 +148,6 @@ use ndap;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
 
 -- ###
 
@@ -186,8 +162,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
 -- ###
 
 -- 	Q17.	Write a query that retrieves srcStateName, srcDistrictName, Year, TotalPopulation for each district and the the highest recorded FarmersPremiumAmount for that district over all available years
@@ -197,20 +171,15 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
 -- ###
 
--- 	Q18.	Perform a LEFT JOIN to combine the total population statistics with the farmers’ data (TotalFarmersCovered, SumInsured) for each district and state. 
+-- 	Q18.	Perform a LEFT JOIN to combine the total population statistics with the farmers’ data (TotalFarmersCovered, SumInsured) for each district and state.
 -- 		Return the total premium amount (FarmersPremiumAmount) and the average population count for each district aggregated over the years, where the total FarmersPremiumAmount is greater than 100 crores.
 -- 		Sort the results by total farmers' premium amount, highest first.
 -- ###
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
-
-
 
 -- ###
 
@@ -225,9 +194,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
-
 -- ###
 
 -- 	Q20.	Write a query to find the srcStateName where the SumInsured is higher than the SumInsured of the district with the highest FarmersPremiumAmount.
@@ -236,9 +202,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
-
 -- ###
 
 -- 	Q21.	Write a query to find the srcDistrictName where the FarmersPremiumAmount is higher than the average FarmersPremiumAmount of the state that has the highest TotalPopulation.
@@ -246,9 +209,6 @@ use ndap;
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
-
-
 
 -- ###
 
@@ -263,9 +223,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
-
 -- ###
 
 -- 	Q23.	Use the RANK() function to rank the districts (srcDistrictName) based on the SumInsured (descending) and partition by alphabetical srcStateName.
@@ -273,8 +230,6 @@ use ndap;
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
-
 
 -- ###
 
@@ -284,9 +239,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
-
 -- ###
 
 -- -------------------------------------------------------------------------------------------------
@@ -294,15 +246,12 @@ use ndap;
 -- SECTION 9.
 -- Data Integrity (Constraints, Foreign Keys) [4 Marks]
 
--- 	Q25.	Create a table 'districts' with DistrictCode as the primary key and columns for DistrictName and StateCode. 
+-- 	Q25.	Create a table 'districts' with DistrictCode as the primary key and columns for DistrictName and StateCode.
 -- 		Create another table 'states' with StateCode as primary key and column for StateName.
 -- ###
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
-
-
 
 -- ###
 
@@ -311,9 +260,6 @@ use ndap;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
-
-
 
 -- ###
 
@@ -328,9 +274,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
-
 -- ###
 
 -- 	Q28.	Update the Year to '2021' for all records where srcStateName is 'HIMACHAL PRADESH'.
@@ -339,8 +282,6 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 
-
-
 -- ###
 
 -- 	Q29.	Delete all records where the TotalFarmersCovered is less than 10000 and Year is 2020.
@@ -348,7 +289,5 @@ use ndap;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
-
 
 -- ###
