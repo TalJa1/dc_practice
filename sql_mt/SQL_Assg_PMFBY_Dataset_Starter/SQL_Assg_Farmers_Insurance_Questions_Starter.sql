@@ -11,7 +11,7 @@ use ndap;
 -- ###
 -- TYPE YOUR CODE BELOW >
 -- <write your answers in the empty spaces given, the length of solution queries (and the solution writing space) can vary>
-SELECT DISTINCT srcStateName FROM `FarmersInsuranceData`;
+SELECT DISTINCT `srcStateName` FROM `FarmersInsuranceData`;
 
 ###
 
@@ -53,8 +53,8 @@ SELECT * FROM `FarmersInsuranceData` WHERE srcYear = '2020';
 SELECT *
 FROM `FarmersInsuranceData`
 WHERE
-    TotalPopulationRural > 1000000
-    AND srcStateName = 'HIMACHAL PRADESH';
+    `TotalPopulationRural` > 1000000
+    AND `srcStateName` = 'HIMACHAL PRADESH';
 
 -- ###
 
@@ -106,6 +106,12 @@ GROUP BY
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    `srcYear`,
+    AVG(`InsuredLandArea`) AS AverageInsuredLandArea
+FROM `FarmersInsuranceData`
+GROUP BY
+    `srcYear`;
 
 -- ###
 
@@ -114,6 +120,14 @@ GROUP BY
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    `srcDistrictName`,
+    SUM(`TotalFarmersCovered`) AS TotalFarmersCovered
+FROM `FarmersInsuranceData`
+WHERE
+    `InsuranceUnits` > 0
+GROUP BY
+    `srcDistrictName`;
 
 -- ###
 
