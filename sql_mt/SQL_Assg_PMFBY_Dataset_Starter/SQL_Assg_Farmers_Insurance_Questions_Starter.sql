@@ -166,8 +166,7 @@ SELECT
 FROM `FarmersInsuranceData`
 WHERE
     `srcYear` = '2020'
-ORDER BY
-    `TotalPopulation` DESC
+ORDER BY `TotalPopulation` DESC
 LIMIT 5;
 
 -- ###
@@ -198,6 +197,16 @@ LIMIT 10;
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    `srcStateName`,
+    `srcYear`,
+    SUM(`TotalFarmersCovered`) / SUM(`TotalPopulation`) AS FarmersToPopulationRatio
+FROM `FarmersInsuranceData`
+GROUP BY
+    `srcStateName`,
+    `srcYear`
+ORDER BY FarmersToPopulationRatio DESC
+LIMIT 3;
 
 -- ###
 
@@ -211,6 +220,9 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT DISTINCT
+    SUBSTRING(`srcStateName`, 1, 3) AS StateShortName
+FROM `FarmersInsuranceData`;
 
 -- ###
 
@@ -219,6 +231,10 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT `srcDistrictName`
+FROM `FarmersInsuranceData`
+WHERE
+    `srcDistrictName` LIKE 'B%';
 
 -- ###
 
@@ -227,6 +243,12 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    `srcStateName`,
+    `srcDistrictName`
+FROM `FarmersInsuranceData`
+WHERE
+    `srcDistrictName` LIKE '%pur';
 
 -- ###
 
@@ -240,6 +262,17 @@ LIMIT 10;
 -- 	[4 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    srcStateName,
+    srcDistrictName,
+    SUM(FarmersPremiumAmount) AS TotalFarmersPremium
+FROM FarmersInsuranceData
+WHERE
+    InsuranceUnits > 10
+GROUP BY
+    srcStateName,
+    srcDistrictName,
+    srcYear
 
 -- ###
 
@@ -249,6 +282,25 @@ LIMIT 10;
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+WITH
+    DistrictMaxPremiums AS (
+        SELECT
+            srcStateName,
+            srcDistrictName,
+            MAX(FarmersPremiumAmount) AS MaxDistrictPremiumAmount
+        FROM FarmersInsuranceData
+        GROUP BY
+            srcStateName,
+            srcDistrictName
+        HAVING
+            MAX(FarmersPremiumAmount) > 200000000
+    )
+SELECT fid.srcStateName, fid.srcDistrictName, fid.Year_, fid.TotalPopulation, dmp.MaxDistrictPremiumAmount
+FROM
+    FarmersInsuranceData fid
+    INNER JOIN DistrictMaxPremiums dmp ON fid.srcStateName = dmp.srcStateName
+    AND fid.srcDistrictName = dmp.srcDistrictName
+ORDER BY fid.srcStateName, fid.srcDistrictName, fid.Year_;
 
 -- ###
 
@@ -259,6 +311,30 @@ LIMIT 10;
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    f.srcStateName,
+    f.srcDistrictName,
+    SUM(f.FarmersPremiumAmount) AS TotalFarmersPremiumAmount,
+    AVG(f.TotalPopulation) AS AveragePopulationCount
+FROM
+    FarmersInsuranceData f
+    LEFT JOIN (
+        SELECT
+            srcStateName,
+            srcDistrictName,
+            SUM(TotalPopulation) AS TotalPopulation
+        FROM FarmersInsuranceData
+        GROUP BY
+            srcStateName,
+            srcDistrictName
+    ) AS p ON f.srcStateName = p.srcStateName
+    AND f.srcDistrictName = p.srcDistrictName
+GROUP BY
+    f.srcStateName,
+    f.srcDistrictName
+HAVING
+    SUM(f.FarmersPremiumAmount) > 1000000000
+ORDER BY TotalFarmersPremiumAmount DESC;
 
 -- ###
 
@@ -272,6 +348,13 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT srcDistrictName
+FROM FarmersInsuranceData
+WHERE
+    TotalFarmersCovered > (
+        SELECT AVG(TotalFarmersCovered)
+        FROM FarmersInsuranceData
+    );
 
 -- ###
 
@@ -280,6 +363,15 @@ LIMIT 10;
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT srcStateName
+FROM FarmersInsuranceData
+WHERE
+    SumInsured > (
+        SELECT `SumInsured`
+        FROM FarmersInsuranceData
+        ORDER BY FarmersPremiumAmount DESC
+        LIMIT 1
+    );
 
 -- ###
 
@@ -288,6 +380,20 @@ LIMIT 10;
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT `srcDistrictName`
+FROM `FarmersInsuranceData`
+WHERE
+    `FarmersPremiumAmount` > (
+        SELECT AVG(`FarmersPremiumAmount`)
+        FROM `FarmersInsuranceData`
+        WHERE
+            `srcStateName` = (
+                SELECT `srcStateName`
+                FROM `FarmersInsuranceData`
+                ORDER BY `TotalPopulation` DESC
+                LIMIT 1
+            )
+    )
 
 -- ###
 
@@ -301,6 +407,10 @@ LIMIT 10;
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT *, ROW_NUMBER() OVER (
+        ORDER BY TotalFarmersCovered DESC
+    ) AS RowNumberCheck
+FROM `FarmersInsuranceData`;
 
 -- ###
 
@@ -309,6 +419,16 @@ LIMIT 10;
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    srcStateName,
+    srcDistrictName,
+    SumInsured,
+    RANK() OVER (
+        PARTITION BY
+            srcStateName
+        ORDER BY SumInsured DESC
+    ) AS DistrictRank
+FROM `FarmersInsuranceData`;
 
 -- ###
 
@@ -317,6 +437,22 @@ LIMIT 10;
 -- 	[4 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    srcStateName,
+    srcDistrictName,
+    srcYear,
+    FarmersPremiumAmount,
+    SUM(FarmersPremiumAmount) OVER (
+        PARTITION BY
+            srcStateName,
+            srcDistrictName
+        ORDER BY srcYear ASC
+    ) AS CumulativeFarmersPremiumAmount
+FROM `FarmersInsuranceData`
+ORDER BY
+    srcStateName,
+    srcDistrictName,
+    srcYear;
 
 -- ###
 
@@ -331,6 +467,16 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+CREATE Table districts (
+    DistrictCode VARCHAR(10) PRIMARY KEY,
+    DistrictName VARCHAR(100),
+    StateCode VARCHAR(10)
+)
+
+CREATE Table states (
+    StateCode VARCHAR(10) PRIMARY KEY,
+    StateName VARCHAR(100)
+);
 
 -- ###
 
@@ -339,6 +485,8 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+ALTER TABLE districts
+ADD CONSTRAINT fk_statecode_for_districts FOREIGN KEY (StateCode) REFERENCES states (StateCode);
 
 -- ###
 
@@ -352,6 +500,16 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+UPDATE `FarmersInsuranceData`
+SET
+    `FarmersPremiumAmount` = 500.0
+WHERE
+    rowID = 1;
+
+SELECT `FarmersPremiumAmount`
+FROM `FarmersInsuranceData`
+WHERE
+    rowID = 1;
 
 -- ###
 
@@ -360,6 +518,16 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+UPDATE `FarmersInsuranceData`
+SET
+    `srcYear` = '2021'
+WHERE
+    `srcStateName` = 'HIMACHAL PRADESH';
+
+SELECT `srcYear`
+FROM `FarmersInsuranceData`
+WHERE
+    `srcStateName` = 'HIMACHAL PRADESH';
 
 -- ###
 
@@ -368,5 +536,15 @@ LIMIT 10;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+DELETE FROM `FarmersInsuranceData`
+WHERE
+    `TotalFarmersCovered` < 10000
+    AND `srcYear` = '2020';
+
+SELECT COUNT(*) AS Records
+FROM `FarmersInsuranceData`
+WHERE
+    `TotalFarmersCovered` < 10000
+    AND `srcYear` = '2020';
 
 -- ###
