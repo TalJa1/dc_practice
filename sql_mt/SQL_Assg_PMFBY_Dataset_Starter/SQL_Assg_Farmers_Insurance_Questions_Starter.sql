@@ -21,7 +21,14 @@ SELECT DISTINCT srcStateName FROM `FarmersInsuranceData`;
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-
+SELECT
+    f.srcStateName,
+    SUM(f.TotalFarmersCovered) AS TotalFarmersCovered,
+    SUM(f.SumInsured) AS SumInsured
+FROM `FarmersInsuranceData` f
+GROUP BY
+    f.srcStateName
+ORDER BY TotalFarmersCovered DESC;
 
 -- ###
 
@@ -34,6 +41,7 @@ SELECT DISTINCT srcStateName FROM `FarmersInsuranceData`;
 -- 	[2 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT * FROM `FarmersInsuranceData` WHERE srcYear = '2020';
 
 -- ###
 
@@ -42,6 +50,11 @@ SELECT DISTINCT srcStateName FROM `FarmersInsuranceData`;
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT *
+FROM `FarmersInsuranceData`
+WHERE
+    TotalPopulationRural > 1000000
+    AND srcStateName = 'HIMACHAL PRADESH';
 
 -- ###
 
@@ -51,6 +64,17 @@ SELECT DISTINCT srcStateName FROM `FarmersInsuranceData`;
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    srcStateName,
+    srcDistrictName,
+    SUM(FarmersPremiumAmount) AS Total_Farmers_PremiumAmount
+FROM `FarmersInsuranceData`
+WHERE
+    srcYear = '2018'
+GROUP BY
+    srcStateName,
+    srcDistrictName
+ORDER BY Total_Farmers_PremiumAmount ASC;
 
 -- ###
 
@@ -60,6 +84,16 @@ SELECT DISTINCT srcStateName FROM `FarmersInsuranceData`;
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
+SELECT
+    srcStateName,
+    SUM(TotalFarmersCovered) AS TotalFarmersCovered,
+    SUM(GrossPremiumAmountToBePaid) AS TotalGrossPremiumAmount
+FROM `FarmersInsuranceData`
+WHERE
+    InsuredLandArea > 5.0
+    AND srcYear = '2018'
+GROUP BY
+    srcStateName;
 
 -- ###
 -- ------------------------------------------------------------------------------------------------
