@@ -373,11 +373,13 @@ WHERE
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-SELECT srcStateName
-FROM FarmersInsuranceData
-WHERE
-    SumInsured > (
-        SELECT `SumInsured`
+SELECT F_State.srcStateName
+FROM FarmersInsuranceData AS F_State
+GROUP BY
+    F_State.srcStateName
+HAVING
+    SUM(F_State.SumInsured) > (
+        SELECT SumInsured
         FROM FarmersInsuranceData
         ORDER BY FarmersPremiumAmount DESC
         LIMIT 1
@@ -459,10 +461,6 @@ SELECT
         ORDER BY srcYear ASC
     ) AS CumulativeFarmersPremiumAmount
 FROM `FarmersInsuranceData`
-ORDER BY
-    srcStateName,
-    srcDistrictName,
-    srcYear;
 
 -- ###
 
@@ -516,6 +514,7 @@ SET
 WHERE
     rowID = 1;
 
+-- Check
 SELECT `FarmersPremiumAmount`
 FROM `FarmersInsuranceData`
 WHERE
@@ -534,6 +533,7 @@ SET
 WHERE
     `srcStateName` = 'HIMACHAL PRADESH';
 
+-- Check the update
 SELECT `srcYear`
 FROM `FarmersInsuranceData`
 WHERE
