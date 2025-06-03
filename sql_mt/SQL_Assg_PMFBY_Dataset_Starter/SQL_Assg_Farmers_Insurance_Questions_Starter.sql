@@ -22,13 +22,13 @@ SELECT DISTINCT `srcStateName` FROM `FarmersInsuranceData`;
 -- ###
 -- TYPE YOUR CODE BELOW >
 SELECT
-    f_the_farmers.srcStateName,
-    SUM(f_the_farmers.TotalFarmersCovered) AS TotalFarmersCovered,
-    SUM(f_the_farmers.SumInsured) AS SumInsured
-FROM `FarmersInsuranceData` f_the_farmers
+    farmers.srcStateName,
+    SUM(farmers.TotalFarmersCovered) AS Total_Farmers_Covered,
+    SUM(farmers.SumInsured) AS Total_Sum_Insured
+FROM FarmersInsuranceData farmers
 GROUP BY
-    f_the_farmers.srcStateName
-ORDER BY TotalFarmersCovered DESC;
+    farmers.srcStateName
+ORDER BY Total_Farmers_Covered DESC;
 
 -- ###
 
@@ -42,6 +42,8 @@ ORDER BY TotalFarmersCovered DESC;
 -- ###
 -- TYPE YOUR CODE BELOW >
 SELECT * FROM `FarmersInsuranceData` WHERE srcYear = '2020';
+-- Or I can use the yearcode instead
+SELECT * FROM `FarmersInsuranceData` WHERE `YearCode` = '2020';
 
 -- ###
 
@@ -165,7 +167,7 @@ SELECT
     `TotalPopulation`
 FROM `FarmersInsuranceData`
 WHERE
-    `srcYear` = '2020'
+    `srcYear` = 2020
 ORDER BY `TotalPopulation` DESC
 LIMIT 5;
 
@@ -177,17 +179,17 @@ LIMIT 5;
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-SELECT
-    `srcStateName`,
-    `srcDistrictName`,
-    `SumInsured`
-FROM `FarmersInsuranceData`
-WHERE
-    `FarmersPremiumAmount` > 0
-ORDER BY
-    `SumInsured` ASC,
-    `FarmersPremiumAmount` ASC
-LIMIT 10;
+SELECT selected_districts.srcStateName, selected_districts.srcDistrictName, selected_districts.SumInsured
+FROM (
+        SELECT
+            srcStateName, srcDistrictName, SumInsured, FarmersPremiumAmount
+        FROM FarmersInsuranceData
+        WHERE
+            FarmersPremiumAmount > 0
+        ORDER BY FarmersPremiumAmount ASC
+        LIMIT 10
+    ) AS selected_districts
+ORDER BY selected_districts.SumInsured ASC, selected_districts.FarmersPremiumAmount ASC;
 
 ###
 
