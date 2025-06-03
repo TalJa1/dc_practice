@@ -267,14 +267,13 @@ WHERE
 SELECT
     srcStateName,
     srcDistrictName,
-    SUM(FarmersPremiumAmount) AS TotalFarmersPremium
+    SUM(FarmersPremiumAmount) AS Aggregated_Farmers_Premium
 FROM FarmersInsuranceData
 WHERE
     InsuranceUnits > 10
 GROUP BY
     srcStateName,
-    srcDistrictName,
-    srcYear
+    srcDistrictName
 
 -- ###
 
@@ -285,24 +284,33 @@ GROUP BY
 -- ###
 -- TYPE YOUR CODE BELOW >
 WITH
-    DistrictMaxPremiums AS (
+    FilterData_Districts AS (
         SELECT
-            srcStateName,
-            srcDistrictName,
-            MAX(FarmersPremiumAmount) AS MaxDistrictPremiumAmount
-        FROM FarmersInsuranceData
-        GROUP BY
-            srcStateName,
-            srcDistrictName
-        HAVING
-            MAX(FarmersPremiumAmount) > 200000000
+            `srcStateName`,
+            `srcDistrictName`,
+            `srcYear`,
+            `TotalPopulation`,
+            `FarmersPremiumAmount`,
+            MAX(`FarmersPremiumAmount`) OVER (
+                PARTITION BY
+                    `srcStateName`,
+                    `srcDistrictName`
+            ) AS HighestDistrictPremiumAmount
+        FROM `FarmersInsuranceData`
     )
-SELECT fid.srcStateName, fid.srcDistrictName, fid.Year_, fid.TotalPopulation, dmp.MaxDistrictPremiumAmount
-FROM
-    FarmersInsuranceData fid
-    INNER JOIN DistrictMaxPremiums dmp ON fid.srcStateName = dmp.srcStateName
-    AND fid.srcDistrictName = dmp.srcDistrictName
-ORDER BY fid.srcStateName, fid.srcDistrictName, fid.Year_;
+SELECT
+    `srcStateName`,
+    `srcDistrictName`,
+    `srcYear`,
+    `TotalPopulation`,
+    HighestDistrictPremiumAmount
+FROM FilterData_Districts
+WHERE
+    HighestDistrictPremiumAmount > 20
+ORDER BY
+    `srcStateName`,
+    `srcDistrictName`,
+    `srcYear`;
 
 -- ###
 
