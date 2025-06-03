@@ -343,7 +343,7 @@ GROUP BY
     f.srcStateName,
     f.srcDistrictName
 HAVING
-    SUM(f.FarmersPremiumAmount) > 1000000000
+    SUM(f.FarmersPremiumAmount) > 100
 ORDER BY TotalFarmersPremiumAmount DESC;
 
 -- ###
