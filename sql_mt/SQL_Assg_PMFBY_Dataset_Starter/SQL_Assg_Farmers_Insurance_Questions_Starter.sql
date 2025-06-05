@@ -372,15 +372,18 @@ WHERE
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-SELECT F_State.srcStateName
-FROM FarmersInsuranceData AS F_State
-GROUP BY
-    F_State.srcStateName
-HAVING
-    SUM(F_State.SumInsured) > (
+SELECT DISTINCT
+    srcStateName
+FROM FarmersInsuranceData
+WHERE
+    SumInsured > (
         SELECT SumInsured
         FROM FarmersInsuranceData
-        ORDER BY FarmersPremiumAmount DESC
+        WHERE
+            FarmersPremiumAmount = (
+                SELECT MAX(FarmersPremiumAmount)
+                FROM FarmersInsuranceData
+            )
         LIMIT 1
     );
 
@@ -418,9 +421,12 @@ WHERE
 -- 	[3 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-SELECT *, ROW_NUMBER() OVER (
+SELECT
+    ROW_NUMBER() OVER (
         ORDER BY TotalFarmersCovered DESC
-    ) AS RowNumberCheck
+    ) AS RowNumberCheck,
+    `srcStateName`,
+    `srcDistrictName`
 FROM `FarmersInsuranceData`;
 
 -- ###
