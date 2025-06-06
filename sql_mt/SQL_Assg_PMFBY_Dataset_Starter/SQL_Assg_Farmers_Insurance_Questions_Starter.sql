@@ -185,10 +185,10 @@ FROM (
         FROM FarmersInsuranceData
         WHERE
             FarmersPremiumAmount > 0
-        ORDER BY FarmersPremiumAmount ASC
+        ORDER BY
+            SumInsured ASC, FarmersPremiumAmount ASC
         LIMIT 10
     ) AS selected_districts
-ORDER BY selected_districts.SumInsured ASC, selected_districts.FarmersPremiumAmount ASC;
 
 ###
 
@@ -222,6 +222,7 @@ LIMIT 3;
 -- ###
 -- TYPE YOUR CODE BELOW >
 SELECT DISTINCT
+    `srcStateName`,
     SUBSTRING(`srcStateName`, 1, 3) AS StateShortName
 FROM `FarmersInsuranceData`;
 
@@ -282,34 +283,20 @@ GROUP BY
 -- 	[5 Marks]
 -- ###
 -- TYPE YOUR CODE BELOW >
-WITH
-    FilterData_Districts AS (
-        SELECT
-            `srcStateName`,
-            `srcDistrictName`,
-            `srcYear`,
-            `TotalPopulation`,
-            `FarmersPremiumAmount`,
-            MAX(`FarmersPremiumAmount`) OVER (
-                PARTITION BY
-                    `srcStateName`,
-                    `srcDistrictName`
-            ) AS HighestDistrictPremiumAmount
-        FROM `FarmersInsuranceData`
-    )
 SELECT
-    `srcStateName`,
-    `srcDistrictName`,
-    `srcYear`,
-    `TotalPopulation`,
-    HighestDistrictPremiumAmount
-FROM FilterData_Districts
+    srcStateName,
+    srcDistrictName,
+    srcYear,
+    TotalPopulation,
+    MAX(FarmersPremiumAmount) AS HighestFarmersPremiumAmount
+FROM FarmersInsuranceData
 WHERE
-    HighestDistrictPremiumAmount > 20
-ORDER BY
-    `srcStateName`,
-    `srcDistrictName`,
-    `srcYear`;
+    FarmersPremiumAmount > 20
+GROUP BY
+    srcStateName,
+    srcDistrictName,
+    srcYear,
+    TotalPopulation
 
 -- ###
 
